@@ -8,7 +8,7 @@ Art event database using React on Rails. I'd like to use auth and maybe even a m
 **Timeline**: 6/3 - flesh out idea. 6/4 - build database. 6/7 - present nearly-completed product.<br />
 
 ### Wireframes
-![image1 2](https://media.git.generalassemb.ly/user/19640/files/35b77d00-861a-11e9-9041-cb6db1c8864a)
+![image1 2](https://media.git.generalassemb.ly/user/19640/files/35b77d00-861a-11e9-9041-cb6db1c8864a)<br />
 vague sketch of a home page
 
 ### ERDs
