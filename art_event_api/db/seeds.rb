@@ -1,7 +1,41 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+Day.create([
+  {name: 'mon'},
+  {name: 'tue'},
+  {name: 'wed'},
+  {name: 'thu'},
+  {name: 'fri'},
+  {name: 'sat'},
+  {name: 'sun'},
+  {name: 'hol'}
+  ])
+
+Medium.create([
+  {category: '2D: Calligraphy'},
+  {category: '2D: Illustration'},
+  {category: '2D: Drawing'},
+  {category: '2D: Graphics'},
+  {category: '2D: Painting'},
+  {category: '2D: Photography'},
+  {category: '2D: Other'},
+  {category: '3D: Architecture'},
+  {category: '3D: Sculpture'},
+  {category: '3D: Crafts'},
+  {category: '3D: Fashion'},
+  {category: '3D: Furniture'},
+  {category: '3D: Installation'},
+  {category: '3D: Product'},
+  {category: '3D: Ceramics'},
+  {category: '3D: Other'},
+  {category: 'Screen: Film'},
+  {category: 'Screen: Digital'},
+  {category: 'Screen: Video Installation'},
+  {category: 'Screen: Other'},
+  {category: 'Misc.: Art Talk'},
+  {category: 'Misc.: Art Party'},
+  {category: 'Misc.: Performance Art'},
+  {category: 'Misc.: Art Competition'},
+  ])
+
+Venue.set_art_beat_data
+
+Event.set_art_beat_data
