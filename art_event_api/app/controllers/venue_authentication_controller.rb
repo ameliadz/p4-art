@@ -3,7 +3,7 @@ class VenueAuthenticationController < ApplicationController
   def login
 
     @venue_owner = VenueOwner.find_by(email: params[:email])
-    if !@user
+    if !@venue_owner
       render json: { error: 'no account' }, status: :not_found
     end
 
