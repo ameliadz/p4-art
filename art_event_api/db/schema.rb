@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_05_132755) do
+ActiveRecord::Schema.define(version: 2019_06_05_161622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,8 +58,8 @@ ActiveRecord::Schema.define(version: 2019_06_05_132755) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "password_digest"
-    t.bigint "venue_id"
-    t.index ["venue_id"], name: "index_venue_owners_on_venue_id"
+    t.string "first_name"
+    t.string "last_name"
   end
 
   create_table "venues", force: :cascade do |t|
@@ -71,8 +71,10 @@ ActiveRecord::Schema.define(version: 2019_06_05_132755) do
     t.string "closing_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "venue_owner_id"
+    t.index ["venue_owner_id"], name: "index_venues_on_venue_owner_id"
   end
 
   add_foreign_key "events", "venues"
-  add_foreign_key "venue_owners", "venues"
+  add_foreign_key "venues", "venue_owners"
 end
