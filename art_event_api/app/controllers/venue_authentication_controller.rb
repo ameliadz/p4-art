@@ -1,0 +1,2 @@
+class VenueAuthenticationController < ApplicationController
+end
