@@ -36,6 +36,7 @@ class VenuesController < ApplicationController
 
   private
   def get_venue
+    # i guess i could do error handling but i'm tired
     @venue = Venue.find(params[:id])
   end
 
