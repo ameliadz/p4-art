@@ -10,7 +10,7 @@ class VenueOwnersController < ApplicationController
   end
 
   def create
-    @venue_owner = VenueOwner.new(venue_owner_params)
+    @venue_owner = VenueOwner.create(venue_owner_params)
     if @venue_owner.save
       render json: @venue_owner, status: :created
     else
