@@ -4,7 +4,7 @@ class Venue < ApplicationRecord
   belongs_to :venue_owner,
               optional: true
 
-  validates :name, :category, :address, :area, :days_open, :opening_time, :closing_time, presence: true
+  validates :name, :category, :address, :area, :days, :opening_time, :closing_time, presence: true
 
   def self.get_art_beat_data
     url = "https://www.nyartbeat.com/list/event_permanent.en.xml"

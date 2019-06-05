@@ -5,3 +5,4 @@ Rails.application.routes.draw do
 end
 
 # need to figure out paths for viewing venues by an owner
+# search logic will be on front-end
