@@ -1,4 +1,7 @@
 class VenueOwner < ApplicationRecord
+  has_many :venues
+  accepts_nested_attributes_for :venues, allow_destroy: true, reject_if: !new_record?
+
   validates :email,
             presence: true,
             uniqueness: true,

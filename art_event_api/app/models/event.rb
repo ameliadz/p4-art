@@ -2,6 +2,8 @@ class Event < ApplicationRecord
   belongs_to :venue
   has_and_belongs_to_many :media
 
+  validates :name, :description, :price, :permanent, presence: true
+
   def self.get_art_beat_data
     url = "https://www.nyartbeat.com/list/event_permanent.en.xml"
     resource = Net::HTTP.get_response(URI.parse(url)).body
