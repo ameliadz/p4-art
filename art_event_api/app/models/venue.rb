@@ -1,5 +1,4 @@
 class Venue < ApplicationRecord
-  has_and_belongs_to_many :days
   has_many :events
   belongs_to :venue_owner,
               optional: true
@@ -25,7 +24,7 @@ class Venue < ApplicationRecord
         days_open = []
         venue['DaysClosed'].each do |key, value|
           if value == '0'
-            days_open.push(Day.find_by(name: key))
+            days_open.push(key)
           end
         end
         if !Venue.find_by(name: venue['Name'])

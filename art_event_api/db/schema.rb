@@ -10,21 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_05_161622) do
+ActiveRecord::Schema.define(version: 2019_06_05_224033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "days", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "days_venues", id: false, force: :cascade do |t|
-    t.bigint "day_id", null: false
-    t.bigint "venue_id", null: false
-  end
 
   create_table "events", force: :cascade do |t|
     t.string "name"
@@ -72,6 +61,7 @@ ActiveRecord::Schema.define(version: 2019_06_05_161622) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "venue_owner_id"
+    t.string "days", default: [], array: true
     t.index ["venue_owner_id"], name: "index_venues_on_venue_owner_id"
   end
 

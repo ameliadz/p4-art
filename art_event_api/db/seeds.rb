@@ -1,14 +1,3 @@
-Day.create([
-  {name: 'mon'},
-  {name: 'tue'},
-  {name: 'wed'},
-  {name: 'thu'},
-  {name: 'fri'},
-  {name: 'sat'},
-  {name: 'sun'},
-  {name: 'hol'}
-  ])
-
 Medium.create([
   {category: '2D: Calligraphy'},
   {category: '2D: Illustration'},
@@ -16,6 +5,7 @@ Medium.create([
   {category: '2D: Graphics'},
   {category: '2D: Painting'},
   {category: '2D: Photography'},
+  {category: '2D: Prints'},
   {category: '2D: Other'},
   {category: '3D: Architecture'},
   {category: '3D: Sculpture'},

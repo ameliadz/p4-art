@@ -19,10 +19,21 @@ class Event < ApplicationRecord
       result = event[1].first[1]
 
       result.each do |item|
+
         img_array = []
         item['Image'].each do |image|
           img_array.push(image['src'])
         end
+
+        media_array = []
+        puts item['Name']
+        puts item['Media']
+        media_array.push(Medium.find_by(category: item['Media']))
+        # item['Media'].each do |media|
+        #   m = Medium.find_by(category: media)
+        #   media_array.push(m)
+        # end
+
         def self.date_test(date)
           begin
             return Date.parse(date)
@@ -41,7 +52,8 @@ class Event < ApplicationRecord
           permanent: (item['PermanentEvent'] == "1"),
           latitude: item['Latitude'],
           longitude: item['Longitude'],
-          venue: Venue.find_by(name: item['Venue']['Name'])
+          venue: Venue.find_by(name: item['Venue']['Name']),
+          media: media_array
         )
       end
 

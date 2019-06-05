@@ -2,7 +2,7 @@ class EventsController < ApplicationController
   before_action :get_event, only: [:show, :update, :destroy]
   def index
     @events = Event.all
-    render json: @events, include: {venue: {include: :days}}, status: :ok
+    render json: @events, include: :venue, status: :ok
   end
 
   def show
@@ -44,3 +44,5 @@ class EventsController < ApplicationController
   end
 
 end
+
+# include: {venue: {include: :days}}
