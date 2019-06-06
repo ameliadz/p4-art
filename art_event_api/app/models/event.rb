@@ -26,8 +26,6 @@ class Event < ApplicationRecord
         end
 
         media_array = []
-        puts item['Name']
-        puts item['Media']
         media_array.push(Medium.find_by(category: item['Media']))
         # item['Media'].each do |media|
         #   m = Medium.find_by(category: media)

@@ -42,6 +42,6 @@ class VenueOwnersController < ApplicationController
   end
 
   def venue_owner_params
-    params.require(:venue_owner).permit(:id, :email, :password, :first_name, :last_name, venues_attributes: [:id, :name, :category, :address, :area, :opening_time, :closing_time, :days])
+    params.require(:venue_owner).permit(:id, :email, :password, :first_name, :last_name, venues_attributes: [:id, :name, :category, :address, :area, :opening_time, :closing_time, :days => []])
   end
 end

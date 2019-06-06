@@ -1,5 +1,5 @@
 class VenueOwner < ApplicationRecord
-  has_many :venues
+  has_many :venues, dependent: :destroy
   accepts_nested_attributes_for :venues, allow_destroy: true
 
   validates :email,
