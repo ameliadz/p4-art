@@ -2,11 +2,11 @@ class EventsController < ApplicationController
   before_action :get_event, only: [:show, :update, :destroy]
   def index
     @events = Event.all
-    render json: @events, include: :venue, status: :ok
+    render json: @events, include: [:venue, :media], status: :ok
   end
 
   def show
-    render json: @event, include: :venue, status: :ok
+    render json: @event, include: [:venue, :media], status: :ok
   end
 
   def create
