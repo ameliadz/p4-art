@@ -5,7 +5,7 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <Events events={this.props.events} selectEvent={this.props.selectEvent}/>
+        <Events events={this.props.events}/>
       </div>
     )
   }
