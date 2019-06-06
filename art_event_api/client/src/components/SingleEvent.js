@@ -24,6 +24,9 @@ class SingleEvent extends Component {
           <p>{artEvent.description}</p>
           <p>{artEvent.price}</p>
           { artEvent.permanent ? <p>Permanent event</p> : <p>{artEvent.start_date} - {artEvent.end_date}</p> }
+          <ul>
+            {artEvent.media.map((medium, index) => <li key={index}>{medium.category}</li>)}
+          </ul>
           <img src={artEvent.images[2]} alt={artEvent.name} />
           <div className="event-venue">
             <p>At <Link to={`/venues/${artEvent.venue_id}`}>{artEvent.venue.name}</Link></p>

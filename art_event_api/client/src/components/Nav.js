@@ -7,7 +7,7 @@ class Nav extends Component {
       <nav>
         <Link to="/">Home</Link>
         <Link to="/venues">All Venues</Link>
-        {this.props.loggedIn ? <Link to="/account">My Account</Link> : <Link to="/login">Log In</Link>}
+        {this.props.user ? <Link to="/account">My Account</Link> : <Link to="/login">Log In</Link>}
       </nav>
     )
   }

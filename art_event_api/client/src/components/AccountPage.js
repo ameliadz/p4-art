@@ -5,7 +5,15 @@ class AccountPage extends Component {
     const owner = this.props.user;
     return (
       <div>
-        { owner ? <h2>Welcome, {owner.first_name} {owner.last_name}</h2> : <p>Error: not logged in</p> }
+        { owner ?
+          <div>
+            <h2>Welcome, {owner.first_name} {owner.last_name}</h2>
+            <button onClick={this.props.handleLogout}>Log Out</button>
+          </div>
+          :
+          <div>
+            <p>Error: not logged in</p>
+          </div> }
       </div>
     )
   }

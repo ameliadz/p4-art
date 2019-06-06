@@ -1,6 +1,5 @@
 class VenueOwnersController < ApplicationController
-  before_action :authorize_request, except: [:show, :create]
-  # i realize that you should not be able to view an index of users but i am currently faking auth for test purposes
+  before_action :authorize_request, except: :create
   before_action :get_venue_owner, only: [:show, :update, :destroy]
 
   def index

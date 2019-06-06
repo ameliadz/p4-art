@@ -2,9 +2,13 @@ import axios from 'axios';
 
 const BASE_URL = "http://localhost:4567";
 
-export const getUser = async() => {
+export const getUser = async(token, id) => {
   try {
-    const response = await axios.get(`${BASE_URL}/venue_owners/4`);
+    const config = {
+      headers: { 'Authorization': token }
+    };
+    const response = await axios.get(`${BASE_URL}/venue_owners/${id}`, config);
+    console.log(response.data);
     return response.data
   } catch (e) {
     console.log(e);
@@ -14,7 +18,6 @@ export const getUser = async() => {
 export const loginUser = async (loginData) => {
   try {
     const response = await axios.post(`${BASE_URL}/auth/login/`, loginData)
-    console.log(response);
     return response.data
   } catch (e) {
     console.log(e)

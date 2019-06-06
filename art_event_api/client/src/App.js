@@ -18,7 +18,12 @@ class App extends Component {
       venues: [],
       events: [],
       loggedIn: false,
+      userToken: null,
       user: null,
+      authFormData: {
+        email: "",
+        password: ""
+}
     }
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
@@ -28,46 +33,57 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const user = await getUser();
+    this.checkLogin();
     const venues = await getVenues();
     const events = await getEvents();
-    this.setState({ venues, events, user });
-    this.setState({
-      loggedIn: true
-    })
+    this.setState({ venues, events });
     console.log(this.state);
   }
 
-  checkLogin() {
+  async checkLogin() {
+    try {
       const checkUser = localStorage.getItem("jwt")
       if (checkUser) {
-        const user = decode(checkUser)
-        this.setState({ user })
+        const currentUser = decode(checkUser);
+        const user = await getUser(checkUser, currentUser.venue_owner_id);
+        this.setState({
+          user: user
+        });
+        console.log('logged',user)
+      } else {
+        console.log('nah')
       }
+    } catch (err) {console.log(err.message)}
   }
 
   async handleLogin() {
     const userData = await loginUser(this.state.authFormData)
-    if (userData) {
-      this.setState({
-        currentUser: decode(userData.token)
-      })
+    console.log('log', userData.token)
+    if (userData.token) {
       localStorage.setItem("jwt", userData.token);
+      this.setState({
+        userToken: decode(userData.token),
+        loggedIn: true
+      })
     } else {
-      this.props.history.push('/auth/login');
+      this.props.history.push('/login');
     }
+
+
   }
 
   async handleRegister(e) {
     e.preventDefault()
-    const userData = await registerUser({ "user": this.state.authFormData })
+    const userData = await registerUser({ "venue_owner": this.state.authFormData })
     this.handleLogin();
   }
 
   handleLogout() {
     localStorage.removeItem("jwt")
     this.setState({
-      user: null
+      currentUser: null,
+      userToken: null,
+      loggedIn: false
     })
   }
 
@@ -90,11 +106,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header loggedIn={this.state.loggedIn} />
+        <Header user={this.state.user} />
         <Switch>
           <Route exact path="/" render={() => <Home events={this.state.events} />}/>
-          <Route path="/login" render={() => <Login handleLogin={this.handleLogin} handleChange={this.authHandleChange} formData={this.state.authFormData} handleLoginButton = {this.handleLoginButton} />} />
-          <Route path="/account" render={() => <AccountPage user={this.state.user} />} />
+          <Route path="/login" render={() => <Login handleLogin={this.handleLogin} handleChange={this.authHandleChange} formData={this.state.authFormData} handleLoginButton={this.handleLoginButton} />} />
+          <Route path="/account" render={() => <AccountPage user={this.state.user} handleLogout={this.handleLogout} />} />
           <Route path="/events/:id" render={(props) => <SingleEvent {...props} />} />
           <Route exact path="/venues" render={() => <Venues venues={this.state.venues} />} />
           <Route path="/venues/:id" render={(props) => <SingleVenue {...props} />} />
@@ -110,5 +126,4 @@ export default withRouter(App);
 
 //
 // <Route exact path="/" render={() => this.state.currentUser ? <button className="button" type="button" onClick={this.handleLogout}>Log Out</button> : <button className="button" type="button" onClick={() => this.props.history.push('/auth/login')}>Log In</button>} />
-// <Route exact path="/auth/login" render={() => <Login handleLogin={this.handleLogin} handleChange={this.authHandleChange} formData={this.state.authFormData} handleLoginButton={this.handleLoginButton} />} />
 // <Route exact path="/users" render={() => <Register handleRegister={this.handleRegister} handleChange={this.authHandleChange} formData={this.state.authFormData} />} />
