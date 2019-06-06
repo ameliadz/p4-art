@@ -6,7 +6,7 @@ export default function Header(props) {
   return (
     <header>
       <Link to="/"><h1>art events</h1></Link>
-      <Nav />
+      <Nav loggedIn={props.loggedIn} />
     </header>
   )
 }
