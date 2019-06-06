@@ -1,3 +1,39 @@
 .App {
   text-align: center;
 }
+
+header {
+  background-color: navy;
+  color: white;
+}
+
+h1 {
+  padding: 20px;
+}
+
+h1, header a {
+  margin: 0;
+  text-decoration: none;
+  color: white;
+}
+
+/* nav {
+  border: 2px solid black;
+} */
+
+nav a {
+  margin: auto 10px;
+  display: inline-block;
+  color: white;
+  padding: 10px;
+}
+
+nav a:hover {
+  padding-bottom: 8px;
+  border-bottom: 2px solid yellow;
+}
+
+.event a {
+  color: black;
+  text-decoration: none;
+}
