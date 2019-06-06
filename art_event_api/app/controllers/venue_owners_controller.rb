@@ -1,14 +1,15 @@
 class VenueOwnersController < ApplicationController
-  before_action :authorize_request, except: :create
+  before_action :authorize_request, except: [:show, :create]
+  # i realize that you should not be able to view an index of users but i am currently faking auth for test purposes
   before_action :get_venue_owner, only: [:show, :update, :destroy]
 
   def index
     @venue_owners = VenueOwner.all
-    render json: @venue_owners, include: {venues: {include: :days}}, status: :ok
+    render json: @venue_owners, include: :venues, status: :ok
   end
 
   def show
-    render json: @venue_owner, include: {venues: {include: :days}}, status: :ok
+    render json: @venue_owner, include: :venues, status: :ok
   end
 
   def create
