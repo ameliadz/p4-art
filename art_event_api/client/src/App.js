@@ -3,6 +3,7 @@ import './App.css';
 import Header from './components/Header';
 import Login from './components/Login';
 import Home from './components/Home';
+import Register from './components/Register';
 import SingleEvent from './components/SingleEvent';
 import Venues from './components/Venues';
 import SingleVenue from './components/SingleVenue';
@@ -17,13 +18,40 @@ class App extends Component {
     this.state = {
       venues: [],
       events: [],
-      loggedIn: false,
-      userToken: null,
+      //userToken: null,
       user: null,
       authFormData: {
         email: "",
         password: ""
-}
+      },
+      registerFormData: {
+        email: "",
+        password: "",
+        first_name: "",
+        last_name: "",
+      },
+      venueForm: {
+        name: "",
+        category: "",
+        area: "",
+        address: "",
+        opening_time: "",
+        closing_time: "",
+        days: []
+      },
+      eventForm: {
+        name: "",
+        description: "",
+        images: [],
+        price: "",
+        start_date: "",
+        end_date: "",
+        permanent: "",
+        latitude: "",
+        longitude: "",
+        venue: "",
+        media: []
+      }
     }
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegister = this.handleRegister.bind(this);
@@ -62,19 +90,17 @@ class App extends Component {
     if (userData.token) {
       localStorage.setItem("jwt", userData.token);
       this.setState({
-        userToken: decode(userData.token),
+        // userToken: decode(userData.token),
         loggedIn: true
       })
     } else {
       this.props.history.push('/login');
     }
-
-
   }
 
   async handleRegister(e) {
     e.preventDefault()
-    const userData = await registerUser({ "venue_owner": this.state.authFormData })
+    const userData = await registerUser({ "venue_owner": this.state.registerFormData })
     this.handleLogin();
   }
 
@@ -110,6 +136,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" render={() => <Home events={this.state.events} />}/>
           <Route path="/login" render={() => <Login handleLogin={this.handleLogin} handleChange={this.authHandleChange} formData={this.state.authFormData} handleLoginButton={this.handleLoginButton} />} />
+          <Route path="/register" render={() => <Register />} />
           <Route path="/account" render={() => <AccountPage user={this.state.user} handleLogout={this.handleLogout} />} />
           <Route path="/events/:id" render={(props) => <SingleEvent {...props} />} />
           <Route exact path="/venues" render={() => <Venues venues={this.state.venues} />} />

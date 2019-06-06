@@ -27,10 +27,6 @@ class Event < ApplicationRecord
 
         media_array = []
         media_array.push(Medium.find_by(category: item['Media']))
-        # item['Media'].each do |media|
-        #   m = Medium.find_by(category: media)
-        #   media_array.push(m)
-        # end
 
         def self.date_test(date)
           begin
