@@ -27,7 +27,6 @@ class Venue < ApplicationRecord
             days_open.push(key)
           end
         end
-        puts days_open
         if !Venue.find_by(name: venue['Name'])
           Venue.create(
             name: venue['Name'],

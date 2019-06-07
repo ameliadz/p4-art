@@ -36,11 +36,19 @@ class Event < ApplicationRecord
           end
         end
 
+        def self.price_test(price)
+          if price.class == Hash
+            "Free"
+          else
+            price
+          end
+        end
+
         Event.create(
           name: item['Name'],
           description: item['Description'],
           images: img_array,
-          price: item['Price'],
+          price: self.price_test(item['Price']),
           start_date: self.date_test(item['DateStart']),
           end_date: self.date_test(item['DateEnd']),
           permanent: (item['PermanentEvent'] == "1"),

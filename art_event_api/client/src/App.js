@@ -9,7 +9,7 @@ import Venues from './components/Venues';
 import SingleVenue from './components/SingleVenue';
 import AccountPage from './components/AccountPage';
 import decode from 'jwt-decode';
-import { loginUser, registerUser, getVenues, getEvents, getUser } from './services/apiHelper';
+import { loginUser, registerUser, getVenues, getEvents, getUser, deleteEvent } from './services/apiHelper';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
 class App extends Component {
@@ -18,7 +18,6 @@ class App extends Component {
     this.state = {
       venues: [],
       events: [],
-      //userToken: null,
       user: null,
       authFormData: {
         email: "",
@@ -58,6 +57,8 @@ class App extends Component {
     this.handleLogout = this.handleLogout.bind(this);
     this.authHandleChange = this.authHandleChange.bind(this);
     this.handleLoginButton = this.handleLoginButton.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.checkLogin = this.checkLogin.bind(this);
   }
 
   async componentDidMount() {
@@ -71,28 +72,23 @@ class App extends Component {
   async checkLogin() {
     try {
       const checkUser = localStorage.getItem("jwt")
+      console.log(checkUser);
       if (checkUser) {
         const currentUser = decode(checkUser);
         const user = await getUser(checkUser, currentUser.venue_owner_id);
-        this.setState({
+        await this.setState({
           user: user
         });
-        console.log('logged',user)
       } else {
-        console.log('nah')
+        this.props.history.push('/login')
       }
     } catch (err) {console.log(err.message)}
   }
 
   async handleLogin() {
     const userData = await loginUser(this.state.authFormData)
-    console.log('log', userData.token)
-    if (userData.token) {
+    if (userData) {
       localStorage.setItem("jwt", userData.token);
-      this.setState({
-        // userToken: decode(userData.token),
-        loggedIn: true
-      })
     } else {
       this.props.history.push('/login');
     }
@@ -107,9 +103,7 @@ class App extends Component {
   handleLogout() {
     localStorage.removeItem("jwt")
     this.setState({
-      currentUser: null,
-      userToken: null,
-      loggedIn: false
+      user: null
     })
   }
 
@@ -129,6 +123,13 @@ class App extends Component {
     this.props.history.push('/');
   }
 
+  async handleDelete(id) {
+    await deleteEvent(id);
+    const events = await getEvents();
+    this.setState({events})
+    this.props.history.push('/');
+  }
+
   render() {
     return (
       <div className="App">
@@ -138,7 +139,7 @@ class App extends Component {
           <Route path="/login" render={() => <Login handleLogin={this.handleLogin} handleChange={this.authHandleChange} formData={this.state.authFormData} handleLoginButton={this.handleLoginButton} />} />
           <Route path="/register" render={() => <Register />} />
           <Route path="/account" render={() => <AccountPage user={this.state.user} handleLogout={this.handleLogout} />} />
-          <Route path="/events/:id" render={(props) => <SingleEvent {...props} />} />
+          <Route path="/events/:id" render={(props) => <SingleEvent {...props} handleDelete={this.handleDelete} />} />
           <Route exact path="/venues" render={() => <Venues venues={this.state.venues} />} />
           <Route path="/venues/:id" render={(props) => <SingleVenue {...props} />} />
 

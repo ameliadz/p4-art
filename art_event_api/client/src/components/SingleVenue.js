@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import decode from 'jwt-decode';
 import { getVenue } from '../services/apiHelper';
 
 class SingleVenue extends Component {
@@ -22,7 +23,6 @@ class SingleVenue extends Component {
         return (
           <div className="venue-event" key={event.id}>
             <Link to={`/events/${event.id}`}><p>{event.name}</p></Link>
-            <p>{event.description}</p>
             <p>{event.price}</p>
             { event.permanent ? <p>Permanent event</p> : <p>{event.start_date} - {event.end_date}</p> }
           </div>
@@ -35,6 +35,7 @@ class SingleVenue extends Component {
 
   render() {
     const { venue } = this.state;
+    const checkUser = decode(localStorage.getItem("jwt"))
     return (
       <div>
         { venue && <div className="single-venue">
@@ -46,6 +47,11 @@ class SingleVenue extends Component {
             <h4>Events at {venue.name}:</h4>
             {this.venueEvents()}
           </div>
+          { venue.venue_owner_id === checkUser.venue_owner_id ?
+            <div className="buttons">
+              <button type="button">Edit Venue</button>
+              <button type="button">Delete Venue</button>
+            </div> : null }
         </div> }
       </div>
     )

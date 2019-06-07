@@ -11,15 +11,15 @@ h1 {
   padding: 20px;
 }
 
+h1 span {
+  font-family: serif;
+}
+
 h1, header a {
   margin: 0;
   text-decoration: none;
   color: white;
 }
-
-/* nav {
-  border: 2px solid black;
-} */
 
 nav a {
   margin: auto 10px;

@@ -72,3 +72,11 @@ export const getEvent = async (id) => {
     console.log(e);
   }
 }
+
+export const deleteEvent = async (id) => {
+  try {
+    await axios.delete(`${BASE_URL}/events/${id}`)
+  } catch (e) {
+    console.log(e);
+  }
+}
