@@ -10,7 +10,7 @@ import Venues from './components/Venues';
 import SingleVenue from './components/SingleVenue';
 import AccountPage from './components/AccountPage';
 import decode from 'jwt-decode';
-import { loginUser, registerUser, getVenues, getEvents, deleteEvent, deleteVenue, newVenue, newEvent } from './services/apiHelper';
+import { loginUser, registerUser, getVenues, getEvents, deleteEvent, deleteVenue, newVenue, newEvent, updateVenue, updateEvent } from './services/apiHelper';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
 class App extends Component {
@@ -70,6 +70,10 @@ class App extends Component {
     this.addEvent = this.addEvent.bind(this);
     this.eventHandleChange = this.eventHandleChange.bind(this);
     this.handleMediaSelect = this.handleMediaSelect.bind(this);
+    this.updateEvent = this.updateEvent.bind(this);
+    this.selectEvent = this.selectEvent.bind(this);
+    this.updateVenue = this.updateVenue.bind(this);
+    this.selectVenue = this.selectVenue.bind(this);
   }
 
   async componentDidMount() {
@@ -117,6 +121,7 @@ class App extends Component {
     this.setState({
       user_id: null
     })
+    this.props.history.push('/login')
   }
 
   loginHandleChange(e) {
@@ -177,8 +182,8 @@ class App extends Component {
     }))
   }
 
-  async addVenue(e) {
-    e && e.preventDefault();
+  async addVenue() {
+    // e && e.preventDefault();
     console.log(this.state.user)
     await this.setState(prevState => ({
       venueForm: {
@@ -251,10 +256,51 @@ class App extends Component {
     }))
   }
 
-  async addEvent(e) {
-    e && e.preventDefault();
+  async addEvent() {
+    // e && e.preventDefault();
     let response = await newEvent({"event": this.state.eventForm})
     console.log('resp', response);
+  }
+
+  async updateEvent(id) {
+    const response = await updateEvent(id, {"event": this.state.eventForm})
+    console.log('response', response)
+  }
+
+  selectEvent(artEvent) {
+    let mediaArray = artEvent.media.map(medium => medium.category)
+    this.setState({
+      eventForm: {
+        name: artEvent.name,
+        description: artEvent.description,
+        price: artEvent.price,
+        start_date: artEvent.start_date,
+        end_date: artEvent.end_date,
+        permanent: artEvent.permanent,
+        media: mediaArray,
+        venue_id: artEvent.venue_id
+      }
+    })
+  }
+
+  async updateVenue(id) {
+    const response = await updateVenue(id, {"venue": this.state.venueForm})
+    console.log('venue response', response)
+  }
+
+  selectVenue(venue) {
+    this.setState({
+      venueForm: {
+        name: venue.name,
+        area: venue.area,
+        address: venue.address,
+        category: venue.category,
+        opening_time: venue.opening_time,
+        closing_time: venue.closing_time,
+        venue_owner_id: venue.venue_owner_id,
+        days: venue.days
+      }
+    })
   }
 
   render() {
@@ -295,14 +341,20 @@ class App extends Component {
           />} />
           <Route path="/events/:id" render={(props) => <SingleEvent
             {...props}
+            user_id={this.state.user_id}
+            selectEvent={this.selectEvent}
             handleDelete={this.handleDeleteEvent}
+            updateEvent={this.updateEvent}
+            eventHandleChange={this.eventHandleChange}
+            addEvent={this.addEvent}
+            handleMediaSelect={this.handleMediaSelect}
           />} />
           <Route exact path="/venues" render={() => <Venues
             venues={this.state.venues}
           />} />
           <Route path="/venues/:id" render={(props) => <SingleVenue
-            {...props}
-            handleDelete={this.handleDeleteVenue}
+            {...props} user_id={this.state.user_id} selectVenue={this.selectVenue}
+            handleDelete={this.handleDeleteVenue} updateVenue={this.updateVenue} venueHandleChange={this.venueHandleChange} handleDaySelect={this.handleDaySelect}
           />} />
         </Switch>
       </div>

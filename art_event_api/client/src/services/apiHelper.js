@@ -110,3 +110,23 @@ export const getMedia = async () => {
     console.log(e);
   }
 }
+
+export const updateVenue = async (id, data) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/venues/${id}`, data)
+    console.log(response.data);
+    return response.data;
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const updateEvent = async (id, data) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/events/${id}`, data)
+    console.log(response.data);
+    return response.data;
+  } catch (e) {
+    console.log(e)
+  }
+}

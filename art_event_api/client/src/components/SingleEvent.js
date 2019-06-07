@@ -2,18 +2,39 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import decode from 'jwt-decode';
 import { getEvent } from '../services/apiHelper';
+import EventForm from './EventForm';
 
 class SingleEvent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      artEvent: null
+      artEvent: null,
+      editEvent: false
     }
+    this.editArtEvent = this.editArtEvent.bind(this);
+    this.updateArtEvent = this.updateArtEvent.bind(this);
   }
 
   async componentDidMount() {
     const artEvent = await getEvent(this.props.match.params.id);
     this.setState({ artEvent })
+  }
+
+  editArtEvent() {
+    this.props.selectEvent(this.state.artEvent);
+    this.setState({
+      editEvent: true
+    })
+  }
+
+  async updateArtEvent(e, id) {
+    e.preventDefault();
+    this.props.updateEvent(id);
+    const artEvent = await getEvent(this.props.match.params.id);
+    this.setState({
+      editEvent: false,
+      artEvent: artEvent
+    })
   }
 
   render() {
@@ -38,7 +59,11 @@ class SingleEvent extends Component {
           </div>
           { artEvent.venue.venue_owner_id === checkUser.venue_owner_id ?
             <div className="buttons">
-              <button type="button">Edit Event</button>
+            { this.state.editEvent ?
+              <form onSubmit={(e) => this.updateArtEvent(e, artEvent.id)}>
+                <EventForm user_id={this.props.user_id} selectEvent={this.props.selectEvent} artEvent={artEvent} handleChange={this.props.eventHandleChange} handleMediaSelect={this.props.handleMediaSelect} />
+                <button type="submit">Update Event</button>
+              </form> : <button onClick={this.editArtEvent}>Edit Event</button> }
               <button onClick={() => this.props.handleDelete(artEvent.id)} type="button">Delete Event</button>
             </div> : null }
         </div> }

@@ -18,9 +18,12 @@ class EventForm extends Component {
   }
 
   renderMedia() {
-    const { media } = this.state
+    const { media } = this.state;
+    const inEventMedia = (medium) => {
+      return this.props.artEvent && this.props.artEvent.media.some(media => media.id === medium.id)
+    }
     return media.map(medium => {
-      return <span key={medium.id}><input type="checkbox" name="media" value={medium.category} onChange={this.props.handleMediaSelect}/><span>{medium.category}</span></span>
+      return <span key={medium.id}><input type="checkbox" name="media" value={medium.category} defaultChecked={media && inEventMedia(medium)} onChange={this.props.handleMediaSelect}/><span>{medium.category}</span></span>
     })
   }
 
@@ -30,49 +33,50 @@ class EventForm extends Component {
       <select name="venue_id" onChange={this.props.handleChange} required>
         <option value="">------</option>
         { venues.map(venue => {
-        return <option key={venue.id} value={venue.id}>{venue.name}</option>}) }
+        return <option defaultValue={this.props.artEvent && this.props.artEvent.venue_id === venue.id} key={venue.id} value={venue.id}>{venue.name}</option>}) }
       </select>
     )
   }
 
   render() {
+    const { artEvent } = this.props;
     return(
       <div className="event-form">
         <div>
           <label htmlFor="name" className="label">Event Name</label>
           <div>
-            <input name="name" type="text" placeholder="Event name" onChange={this.props.handleChange} required/>
+            <input name="name" type="text" placeholder="Event name" onChange={this.props.handleChange} defaultValue={(artEvent && artEvent.name) || ""} required/>
           </div>
         </div>
         <div>
           <label htmlFor="description" className="label">Description</label>
           <div>
-            <textarea name="description" placeholder="Event description" onChange={this.props.handleChange} required></textarea>
+            <textarea name="description" placeholder="Event description" onChange={this.props.handleChange} defaultValue={(artEvent && artEvent.description) || ""} required></textarea>
           </div>
         </div>
         <div>
           <label htmlFor="price" className="label">Price/Admission</label>
           <div>
-            <input name="price" type="text" placeholder="Price/Admission" onChange={this.props.handleChange} required/>
+            <input name="price" type="text" placeholder="Price/Admission" onChange={this.props.handleChange} defaultValue={(artEvent && artEvent.price) || ""} required/>
           </div>
         </div>
         <div>
           <label htmlFor="start_date" className="label">Start Date</label>
           <div>
-            <input name="start_date" type="date" onChange={this.props.handleChange}/>
+            <input name="start_date" type="date" onChange={this.props.handleChange} defaultValue={(artEvent && artEvent.start_date) || undefined}/>
           </div>
         </div>
         <div>
           <label htmlFor="end_date" className="label">End Date</label>
           <div>
-            <input name="end_date" type="date" onChange={this.props.handleChange}/>
+            <input name="end_date" type="date" onChange={this.props.handleChange} defaultValue={(artEvent && artEvent.end_date) || undefined}/>
           </div>
         </div>
         <div>
           <label htmlFor="permanent" className="label">Permanent Event?</label>
           { /* if permanent event is false, start/end date should be required */ }
           <div>
-            <input name="permanent" type="radio" onChange={this.props.handleChange} value="true" />Yes
+            <input name="permanent" type="radio" onChange={this.props.handleChange} value="true" checked={artEvent && artEvent.permanent}/>Yes
             <input name="permanent" type="radio" onChange={this.props.handleChange} value="false" />No
           </div>
         </div>

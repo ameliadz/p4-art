@@ -64,7 +64,6 @@ class AccountPage extends Component {
         { owner ?
           <div className="account dashboard">
             <h2>Welcome, {owner.first_name} {owner.last_name}</h2>
-            <button onClick={this.props.handleLogout}>Log Out</button>
             <div className="owner-venues">
               <p>Your Venues:</p>
               <ul>
@@ -88,6 +87,7 @@ class AccountPage extends Component {
           <div>
             <p>Error: not logged in</p>
           </div> }
+          {this.props.user_id && <button onClick={this.props.handleLogout}>Log Out</button>}
       </div>
     )
   }

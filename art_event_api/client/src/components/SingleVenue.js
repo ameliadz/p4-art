@@ -2,18 +2,39 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import decode from 'jwt-decode';
 import { getVenue } from '../services/apiHelper';
+import VenueForm from './VenueForm';
 
 class SingleVenue extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      venue: null
+      venue: null,
+      editVenue: false
     }
+    this.editArtVenue = this.editArtVenue.bind(this);
+    this.updateArtVenue = this.updateArtVenue.bind(this);
   }
 
   async componentDidMount() {
     const venue = await getVenue(this.props.match.params.id);
     this.setState({ venue })
+  }
+
+  editArtVenue() {
+    this.props.selectVenue(this.state.venue);
+    this.setState({
+      editVenue: true
+    })
+  }
+
+  async updateArtVenue(e, id) {
+    e.preventDefault();
+    this.props.updateVenue(id);
+    const venue = await getVenue(this.props.match.params.id);
+    this.setState({
+      editVenue: false,
+      venue: venue
+    })
   }
 
   venueEvents = () => {
@@ -49,7 +70,11 @@ class SingleVenue extends Component {
           </div>
           { venue.venue_owner_id === checkUser.venue_owner_id ?
             <div className="buttons">
-              <button type="button">Edit Venue</button>
+              { this.state.editVenue ?
+                <form onSubmit={(e) => this.updateArtVenue(e, venue.id)}>
+                  <VenueForm user_id={this.props.user_id} selectVenue={this.props.selectVenue} venue={venue} handleChange={this.props.venueHandleChange} handleDaySelect={this.props.handleDaySelect} />
+                  <button type="submit">Update Venue</button>
+                </form> : <button onClick={this.editArtVenue}>Edit Venue</button> }
               <button type="button" onClick={() => this.props.handleDelete(venue.id)}>Delete Venue</button>
             </div> : null }
         </div> }
