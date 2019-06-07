@@ -10,9 +10,14 @@ class EventsController < ApplicationController
   end
 
   def create
+    puts 'hi'
+    puts params[:event][:media]
     @event = Event.create(event_params)
+    params[:event][:media].each do |id|
+      @event.media.push(Medium.find(id))
+    end
     if @event.save
-      render json: @event, include: :venue, status: :created
+      render json: @event, include: [:venue, :media], status: :created
     else
       render json: { errors: @event.errors }, status: :unprocessable_entity
     end
@@ -20,7 +25,7 @@ class EventsController < ApplicationController
 
   def update
     if @event.update(event_params)
-      render json: @event, include: :venue, status: :ok
+      render json: @event, include: [:venue, :media], status: :ok
     else
       render json: { errors: @event.errors }, status: :unprocessable_entity
     end
@@ -40,7 +45,7 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:name, :description, :images, :price, :start_date, :end_date, :permanent, :latitude, :longitude, :venue_id)
+    params.require(:event).permit(:name, :description, :images, :price, :start_date, :end_date, :permanent, :latitude, :longitude, :venue_id, :media => [:id])
   end
 
 end
