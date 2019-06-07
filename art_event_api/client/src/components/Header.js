@@ -6,7 +6,7 @@ export default function Header(props) {
   return (
     <header>
       <Link to="/"><h1>ART | <span>happening</span></h1></Link>
-      <Nav user={props.user} />
+      <Nav user_id={props.user_id} />
     </header>
   )
 }

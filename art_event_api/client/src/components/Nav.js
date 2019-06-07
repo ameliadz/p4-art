@@ -6,8 +6,9 @@ class Nav extends Component {
     return (
       <nav>
         <Link to="/">Home</Link>
+        <Link to="/events">All Events</Link>
         <Link to="/venues">All Venues</Link>
-        { this.props.user ? <Link to="/account">My Account</Link> : <Link to="/login">Log In</Link> }
+        { this.props.user_id ? <Link to="/account">My Account</Link> : <Link to="/login">Log In</Link> }
       </nav>
     )
   }
