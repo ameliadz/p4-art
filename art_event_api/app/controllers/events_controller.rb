@@ -10,8 +10,6 @@ class EventsController < ApplicationController
   end
 
   def create
-    puts 'hi'
-    puts params[:event][:media]
     @event = Event.create(event_params)
     params[:event][:media].each do |id|
       @event.media.push(Medium.find(id))
