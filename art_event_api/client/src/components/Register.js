@@ -1,9 +1,10 @@
 import React from 'react';
+import VenueForm from './VenueForm';
 
 export default function Register(props) {
   return (
     <div className="register">
-      <form onSubmit={props.handleLoginButton}>
+      <form onSubmit={props.handleRegisterButton}>
         <div>
           <label htmlFor="email" className="label">Email</label>
           <div>
@@ -19,8 +20,19 @@ export default function Register(props) {
         </div>
 
         <div>
+          <label htmlFor="first_name" className="label">Password</label>
+          <div>
+            <input name="first_name" type="text" placeholder="first name" onChange={props.handleChange}/>
+          </div>
+        </div>
+
+        <div>
+          <VenueForm handleChange={props.handleChange} />
+        </div>
+
+        <div>
           <p>
-            <button type="submit">Login</button>
+            <button type="submit">Register</button>
           </p>
         </div>
       </form>

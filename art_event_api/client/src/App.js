@@ -53,16 +53,18 @@ class App extends Component {
       }
     }
     this.handleLogin = this.handleLogin.bind(this);
-    this.handleRegister = this.handleRegister.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    this.authHandleChange = this.authHandleChange.bind(this);
+    this.loginHandleChange = this.loginHandleChange.bind(this);
     this.handleLoginButton = this.handleLoginButton.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.checkLogin = this.checkLogin.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
+    this.registerHandleChange = this.registerHandleChange.bind(this);
+    this.handleRegisterButton = this.handleRegisterButton.bind(this);
   }
 
   async componentDidMount() {
-    this.checkLogin();
+    await this.checkLogin();
     const venues = await getVenues();
     const events = await getEvents();
     this.setState({ venues, events });
@@ -89,6 +91,7 @@ class App extends Component {
     const userData = await loginUser(this.state.authFormData)
     if (userData) {
       localStorage.setItem("jwt", userData.token);
+      await this.checkLogin();
     } else {
       this.props.history.push('/login');
     }
@@ -100,6 +103,11 @@ class App extends Component {
     this.handleLogin();
   }
 
+  handleRegisterButton(e) {
+    e.preventDefault();
+    console.log('ta-da');
+  }
+
   handleLogout() {
     localStorage.removeItem("jwt")
     this.setState({
@@ -107,7 +115,7 @@ class App extends Component {
     })
   }
 
-  authHandleChange(e) {
+  loginHandleChange(e) {
     const { name, value } = e.target;
     this.setState(prevState => ({
       authFormData: {
@@ -117,10 +125,21 @@ class App extends Component {
     }))
   }
 
+  registerHandleChange(e) {
+    const { name, value } = e.target;
+    this.setState(prevState => ({
+      registerFormData: {
+        ...prevState.registerFormData,
+        [name]: value
+      }
+    }))
+  }
+
   handleLoginButton(e) {
     e.preventDefault();
-    this.handleLogin();
-    this.props.history.push('/');
+    if (this.handleLogin()) {
+      this.props.history.push('/');
+    }
   }
 
   async handleDelete(id) {
@@ -136,8 +155,8 @@ class App extends Component {
         <Header user={this.state.user} />
         <Switch>
           <Route exact path="/" render={() => <Home events={this.state.events} />}/>
-          <Route path="/login" render={() => <Login handleLogin={this.handleLogin} handleChange={this.authHandleChange} formData={this.state.authFormData} handleLoginButton={this.handleLoginButton} />} />
-          <Route path="/register" render={() => <Register />} />
+          <Route path="/login" render={() => <Login handleLogin={this.handleLogin} handleChange={this.loginHandleChange} formData={this.state.authFormData} handleLoginButton={this.handleLoginButton} />} />
+          <Route path="/register" render={() => <Register handleRegister={this.handleRegister} handleChange={this.registerHandleChange} formData={this.state.registerFormData} handleRegisterButton={this.handleRegisterButton} venueForm={this.state.venueForm} />} />
           <Route path="/account" render={() => <AccountPage user={this.state.user} handleLogout={this.handleLogout} />} />
           <Route path="/events/:id" render={(props) => <SingleEvent {...props} handleDelete={this.handleDelete} />} />
           <Route exact path="/venues" render={() => <Venues venues={this.state.venues} />} />
@@ -152,6 +171,4 @@ class App extends Component {
 export default withRouter(App);
 
 
-//
-// <Route exact path="/" render={() => this.state.currentUser ? <button className="button" type="button" onClick={this.handleLogout}>Log Out</button> : <button className="button" type="button" onClick={() => this.props.history.push('/auth/login')}>Log In</button>} />
 // <Route exact path="/users" render={() => <Register handleRegister={this.handleRegister} handleChange={this.authHandleChange} formData={this.state.authFormData} />} />
