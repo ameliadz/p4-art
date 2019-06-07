@@ -89,7 +89,24 @@ export const deleteVenue = async (id) => {
 }
 
 export const newVenue = async (data) => {
-  console.log(data)
-  const response = await axios.post(`${BASE_URL}/venues`, data)
+  try {
+    const response = await axios.post(`${BASE_URL}/venues`, data)
+    return response.data
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export const newEvent = async (data) => {
+  const response = await axios.post(`${BASE_URL}/events`, data)
   return response.data
+}
+
+export const getMedia = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/media`)
+    return response.data
+  } catch (e) {
+    console.log(e);
+  }
 }

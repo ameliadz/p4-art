@@ -10,7 +10,7 @@ import Venues from './components/Venues';
 import SingleVenue from './components/SingleVenue';
 import AccountPage from './components/AccountPage';
 import decode from 'jwt-decode';
-import { loginUser, registerUser, getVenues, getEvents, deleteEvent, deleteVenue, newVenue } from './services/apiHelper';
+import { loginUser, registerUser, getVenues, getEvents, deleteEvent, deleteVenue, newVenue, newEvent } from './services/apiHelper';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
 class App extends Component {
@@ -67,6 +67,9 @@ class App extends Component {
     this.addVenue = this.addVenue.bind(this);
     this.handleDaySelect = this.handleDaySelect.bind(this);
     this.handleDeleteVenue = this.handleDeleteVenue.bind(this);
+    this.addEvent = this.addEvent.bind(this);
+    this.eventHandleChange = this.eventHandleChange.bind(this);
+    this.handleMediaSelect = this.handleMediaSelect.bind(this);
   }
 
   async componentDidMount() {
@@ -190,9 +193,7 @@ class App extends Component {
 
   handleDaySelect(e) {
     const { days } = this.state.venueForm;
-    console.log(days);
     let checked = e.target.checked;
-    console.log(e.target.value);
     let selectedDay = e.target.value;
     if (checked) {
       this.setState(prevState => ({
@@ -215,20 +216,94 @@ class App extends Component {
     }
   }
 
+  handleMediaSelect(e) {
+    const { media } = this.state.eventForm;
+    let checked = e.target.checked;
+    let selectedMedium = e.target.value;
+    if (checked) {
+      this.setState(prevState => ({
+        eventForm: {
+          ...prevState.eventForm,
+          media: [...media, selectedMedium]
+        }
+      }));
+    } else {
+      let index = media.indexOf(selectedMedium);
+      if (index > -1) {
+        media.splice(index, 1);
+        this.setState(prevState => ({
+          eventForm: {
+            ...prevState.eventForm,
+            media: media
+          }
+        }))
+      }
+    }
+  }
+
+  eventHandleChange(e) {
+    const { name, value } = e.target;
+    this.setState(prevState => ({
+      eventForm: {
+        ...prevState.eventForm,
+        [name]: value
+      }
+    }))
+  }
+
+  async addEvent(e) {
+    e && e.preventDefault();
+    let response = await newEvent({"event": this.state.eventForm})
+    console.log('resp', response);
+  }
+
   render() {
     return (
       <div className="App">
         <Header user_id={this.state.user_id} />
         <Switch>
-          <Route exact path="/" render={() => <Home events={this.state.events} />} />
-          <Route exact path="/events" render={() => <Events events={this.state.events} />} />
-          <Route path="/login" render={() => <Login handleLogin={this.handleLogin} handleChange={this.loginHandleChange} formData={this.state.authFormData} handleLoginButton={this.handleLoginButton} />} />
-          <Route path="/register" render={() => <Register handleRegister={this.handleRegister} handleChange={this.registerHandleChange} formData={this.state.registerFormData} handleRegisterButton={this.handleRegisterButton} venueHandleChange={this.venueHandleChange} venueForm={this.state.venueForm} handleDaySelect={this.handleDaySelect} />} />
-          <Route path="/account" render={() => <AccountPage user_id={this.state.user_id} handleLogout={this.handleLogout} venueHandleChange={this.venueHandleChange} addVenue={this.addVenue} handleDaySelect={this.handleDaySelect} />} />
-          <Route path="/events/:id" render={(props) => <SingleEvent {...props} handleDelete={this.handleDeleteEvent} />} />
-          <Route exact path="/venues" render={() => <Venues venues={this.state.venues} />} />
-          <Route path="/venues/:id" render={(props) => <SingleVenue {...props} handleDelete={this.handleDeleteVenue} />} />
-
+          <Route exact path="/" render={() => <Home
+            events={this.state.events}
+          />} />
+          <Route exact path="/events" render={() => <Events
+            events={this.state.events}
+          />} />
+          <Route path="/login" render={() => <Login
+            handleLogin={this.handleLogin}
+            handleChange={this.loginHandleChange}
+            formData={this.state.authFormData}
+            handleLoginButton={this.handleLoginButton}
+          />} />
+          <Route path="/register" render={() => <Register
+            handleRegister={this.handleRegister}
+            handleChange={this.registerHandleChange}
+            formData={this.state.registerFormData}
+            handleRegisterButton={this.handleRegisterButton}
+            venueHandleChange={this.venueHandleChange}
+            venueForm={this.state.venueForm}
+            handleDaySelect={this.handleDaySelect}
+          />} />
+          <Route path="/account" render={() => <AccountPage
+            user_id={this.state.user_id}
+            handleLogout={this.handleLogout}
+            venueHandleChange={this.venueHandleChange}
+            addVenue={this.addVenue}
+            handleDaySelect={this.handleDaySelect}
+            eventHandleChange={this.eventHandleChange}
+            addEvent={this.addEvent}
+            handleMediaSelect={this.handleMediaSelect}
+          />} />
+          <Route path="/events/:id" render={(props) => <SingleEvent
+            {...props}
+            handleDelete={this.handleDeleteEvent}
+          />} />
+          <Route exact path="/venues" render={() => <Venues
+            venues={this.state.venues}
+          />} />
+          <Route path="/venues/:id" render={(props) => <SingleVenue
+            {...props}
+            handleDelete={this.handleDeleteVenue}
+          />} />
         </Switch>
       </div>
     );

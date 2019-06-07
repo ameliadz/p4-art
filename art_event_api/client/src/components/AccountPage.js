@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import VenueForm from './VenueForm';
+import EventForm from './EventForm';
 import decode from 'jwt-decode';
 import { getUser } from '../services/apiHelper';
 
@@ -13,6 +14,8 @@ class AccountPage extends Component {
     }
     this.createVenue = this.createVenue.bind(this);
     this.newVenue = this.newVenue.bind(this);
+    this.createEvent = this.createEvent.bind(this);
+    this.newEvent = this.newEvent.bind(this);
   }
 
   async componentDidMount() {
@@ -40,6 +43,20 @@ class AccountPage extends Component {
     })
   }
 
+  createEvent = () => {
+    this.setState({
+      addEvent: true
+    })
+  }
+
+  newEvent = (e) => {
+    e.preventDefault();
+    this.props.addEvent();
+    this.setState({
+      addEvent: false
+    })
+  }
+
   render() {
     const owner = this.state.user;
     return (
@@ -60,6 +77,11 @@ class AccountPage extends Component {
                   <VenueForm handleDaySelect={this.props.handleDaySelect} handleChange={this.props.venueHandleChange}/>
                   <button type="submit">Create Venue</button>
                 </form> : <button onClick={this.createVenue}>Add New Venue</button> }
+                { this.state.addEvent ?
+                  <form onSubmit={this.newEvent}>
+                    <EventForm user_id={this.props.user_id} handleChange={this.props.eventHandleChange} handleMediaSelect={this.props.handleMediaSelect} />
+                    <button type="submit">Create Event</button>
+                  </form> : <button onClick={this.createEvent}>Add New Event</button> }
             </div>
           </div>
           :
