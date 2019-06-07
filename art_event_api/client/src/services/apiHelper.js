@@ -8,7 +8,6 @@ export const getUser = async(token, id) => {
       headers: { 'Authorization': token }
     };
     const response = await axios.get(`${BASE_URL}/venue_owners/${id}`, config);
-    console.log(response.data);
     return response.data
   } catch (e) {
     console.log(e);
@@ -79,4 +78,18 @@ export const deleteEvent = async (id) => {
   } catch (e) {
     console.log(e);
   }
+}
+
+export const deleteVenue = async (id) => {
+  try {
+    await axios.delete(`${BASE_URL}/venues/${id}`);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export const newVenue = async (data) => {
+  console.log(data)
+  const response = await axios.post(`${BASE_URL}/venues`, data)
+  return response.data
 }

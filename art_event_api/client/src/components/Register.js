@@ -27,7 +27,7 @@ export default function Register(props) {
         </div>
 
         <div>
-          <VenueForm handleChange={props.handleChange} />
+          <VenueForm handleChange={props.venueHandleChange} />
         </div>
 
         <div>

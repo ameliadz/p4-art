@@ -50,7 +50,7 @@ class SingleVenue extends Component {
           { venue.venue_owner_id === checkUser.venue_owner_id ?
             <div className="buttons">
               <button type="button">Edit Venue</button>
-              <button type="button">Delete Venue</button>
+              <button type="button" onClick={() => this.props.handleDelete(venue.id)}>Delete Venue</button>
             </div> : null }
         </div> }
       </div>
