@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import decode from 'jwt-decode';
 import { getEvent } from '../services/apiHelper';
+import decode from 'jwt-decode';
 import EventForm from './EventForm';
 
 class SingleEvent extends Component {
@@ -39,7 +39,6 @@ class SingleEvent extends Component {
 
   render() {
     const { artEvent } = this.state;
-    const checkUser = decode(localStorage.getItem("jwt"))
     return (
       <div>
         { artEvent && <div className="single-event">
@@ -57,7 +56,7 @@ class SingleEvent extends Component {
             <p>{artEvent.venue.opening_time} - {artEvent.venue.closing_time}</p>
             <p>Open: {artEvent.venue.days.map((day, index) => <span key={index}>{day} </span>)}</p>
           </div>
-          { artEvent.venue.venue_owner_id === checkUser.venue_owner_id ?
+          { decode(localStorage.getItem("jwt")) &&  artEvent.venue.venue_owner_id === decode(localStorage.getItem("jwt").venue_owner_id) ?
             <div className="buttons">
             { this.state.editEvent ?
               <form onSubmit={(e) => this.updateArtEvent(e, artEvent.id)}>

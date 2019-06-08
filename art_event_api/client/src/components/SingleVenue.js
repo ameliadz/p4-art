@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import decode from 'jwt-decode';
 import { getVenue } from '../services/apiHelper';
+import decode from 'jwt-decode';
 import VenueForm from './VenueForm';
 
 class SingleVenue extends Component {
@@ -56,7 +56,6 @@ class SingleVenue extends Component {
 
   render() {
     const { venue } = this.state;
-    const checkUser = decode(localStorage.getItem("jwt"))
     return (
       <div>
         { venue && <div className="single-venue">
@@ -68,7 +67,7 @@ class SingleVenue extends Component {
             <h4>Events at {venue.name}:</h4>
             {this.venueEvents()}
           </div>
-          { venue.venue_owner_id === checkUser.venue_owner_id ?
+          {decode(localStorage.getItem("jwt")) && venue.venue_owner_id === decode(localStorage.getItem("jwt").venue_owner_id) ?
             <div className="buttons">
               { this.state.editVenue ?
                 <form onSubmit={(e) => this.updateArtVenue(e, venue.id)}>
