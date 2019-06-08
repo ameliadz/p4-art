@@ -25,7 +25,7 @@ export const loginUser = async (loginData) => {
 
 export const registerUser = async (registerData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/users`, registerData)
+    const response = await axios.post(`${BASE_URL}/venue_owners`, registerData)
     return response.data
   } catch (e) {
     console.log(e);

@@ -110,9 +110,12 @@ class App extends Component {
     }
   }
 
-  async handleRegister(e) {
-    e.preventDefault()
-    await registerUser({ "venue_owner": this.state.registerFormData })
+  async handleRegister() {
+    let venue_owner = this.state.registerFormData;
+    let venue = this.state.venueForm;
+    venue_owner.venue_attributes = venue;
+    console.log(venue_owner)
+    await registerUser({ "venue_owner": venue_owner })
     this.handleLogin();
   }
 
@@ -153,6 +156,7 @@ class App extends Component {
 
   handleRegisterButton(e) {
     e.preventDefault();
+    this.handleRegister();
     if (this.handleLogin()) {
       this.props.history.push('/account');
     }
