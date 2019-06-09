@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class Nav extends Component {
   render() {
     return (
       <nav>
-        <Link to="/">Home</Link>
-        <Link to="/events">All Events</Link>
-        <Link to="/venues">All Venues</Link>
-        { this.props.user_id ? <Link to="/account">My Account</Link> : <Link to="/login">Log In</Link> }
+        <NavLink exact to="/">Home</NavLink>
+        <NavLink to="/events">All Events</NavLink>
+        <NavLink to="/venues">All Venues</NavLink>
+        { this.props.user_id ? <NavLink to="/account">My Account</NavLink> : <NavLink to="/login">Log In</NavLink> }
       </nav>
     )
   }

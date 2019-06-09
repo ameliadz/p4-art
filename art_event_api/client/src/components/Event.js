@@ -5,7 +5,8 @@ export default function Event(props) {
   const { event } = props;
   return (
     <div className="event">
-      <p className="event-name"><Link to={`/events/${event.id}`}>{event.name}</Link> at <Link to={`/venues/${event.venue_id}`}>{event.venue.name}</Link></p>
+      <p><Link to={`/events/${event.id}`}><span className="event-name">{event.name}</span></Link><br />
+      At <Link to={`/venues/${event.venue_id}`}><span className="event-venue-name">{event.venue.name}</span></Link></p>
     </div>
   )
 }

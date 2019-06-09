@@ -5,7 +5,8 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <Events events={this.props.events}/>
+        <h2>Events Around the City</h2>
+        <Events home={true} events={this.props.events}/>
       </div>
     )
   }

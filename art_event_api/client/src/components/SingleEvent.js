@@ -66,7 +66,7 @@ class SingleEvent extends Component {
             {artEvent.media.map((medium, index) => <li key={index}>{medium.category}</li>)}
           </ul>
           <img src={artEvent.images[2]} alt={artEvent.name} />
-          <Map art={artEvent}/>
+        {  /*<Map art={artEvent}/> */}
           <div className="event-venue">
             <p>At <Link to={`/venues/${artEvent.venue_id}`}>{artEvent.venue.name}</Link></p>
             <p>{artEvent.venue.address}</p>
