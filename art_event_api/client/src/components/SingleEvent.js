@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { getEvent } from '../services/apiHelper';
 import decode from 'jwt-decode';
 import EventForm from './EventForm';
+import Map from './Map';
 
 class SingleEvent extends Component {
   constructor(props) {
@@ -65,6 +66,7 @@ class SingleEvent extends Component {
             {artEvent.media.map((medium, index) => <li key={index}>{medium.category}</li>)}
           </ul>
           <img src={artEvent.images[2]} alt={artEvent.name} />
+          <Map art={artEvent}/>
           <div className="event-venue">
             <p>At <Link to={`/venues/${artEvent.venue_id}`}>{artEvent.venue.name}</Link></p>
             <p>{artEvent.venue.address}</p>
