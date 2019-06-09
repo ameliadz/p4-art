@@ -9,15 +9,26 @@ class SingleEvent extends Component {
     super(props);
     this.state = {
       artEvent: null,
-      editEvent: false
+      editEvent: false,
+      user_id: null
     }
     this.editArtEvent = this.editArtEvent.bind(this);
     this.updateArtEvent = this.updateArtEvent.bind(this);
   }
 
   async componentDidMount() {
-    const artEvent = await getEvent(this.props.match.params.id);
-    this.setState({ artEvent })
+    try {
+      const artEvent = await getEvent(this.props.match.params.id);
+      this.setState({ artEvent })
+      console.log(localStorage.getItem("jwt"))
+      if (localStorage.getItem("jwt")) {
+        this.setState({
+          user_id: decode(localStorage.getItem("jwt")).venue_owner_id
+        })
+      }
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   editArtEvent() {
@@ -29,16 +40,20 @@ class SingleEvent extends Component {
 
   async updateArtEvent(e, id) {
     e.preventDefault();
-    this.props.updateEvent(id);
-    const artEvent = await getEvent(this.props.match.params.id);
-    this.setState({
-      editEvent: false,
-      artEvent: artEvent
-    })
+    try {
+      this.props.updateEvent(id);
+      const artEvent = await getEvent(this.props.match.params.id);
+      await this.setState({
+        editEvent: false,
+        artEvent: artEvent
+      })
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   render() {
-    const { artEvent } = this.state;
+    const { artEvent, user_id } = this.state;
     return (
       <div>
         { artEvent && <div className="single-event">
@@ -56,7 +71,7 @@ class SingleEvent extends Component {
             <p>{artEvent.venue.opening_time} - {artEvent.venue.closing_time}</p>
             <p>Open: {artEvent.venue.days.map((day, index) => <span key={index}>{day} </span>)}</p>
           </div>
-          { decode(localStorage.getItem("jwt")) &&  artEvent.venue.venue_owner_id === decode(localStorage.getItem("jwt").venue_owner_id) ?
+          {user_id && (artEvent.venue.venue_owner_id === user_id) ?
             <div className="buttons">
             { this.state.editEvent ?
               <form onSubmit={(e) => this.updateArtEvent(e, artEvent.id)}>
@@ -64,7 +79,7 @@ class SingleEvent extends Component {
                 <button type="submit">Update Event</button>
               </form> : <button onClick={this.editArtEvent}>Edit Event</button> }
               <button onClick={() => this.props.handleDelete(artEvent.id)} type="button">Delete Event</button>
-            </div> : null }
+            </div> : <p></p> }
         </div> }
       </div>
     )

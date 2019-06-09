@@ -77,46 +77,67 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    await this.checkLogin();
-    const venues = await getVenues();
-    const events = await getEvents();
-    this.setState({ venues, events });
-    console.log(this.state);
+    try {
+      const test = await this.checkLogin();
+      console.log(test)
+      const venues = await getVenues();
+      const events = await getEvents();
+      this.setState({ venues, events });
+      console.log(this.state);
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   async checkLogin() {
     try {
       const checkUser = localStorage.getItem("jwt")
+      console.log(checkUser);
+      console.log(typeof checkUser)
       if (checkUser) {
         const currentUser = decode(checkUser);
         console.log(currentUser);
         await this.setState({
           user_id: currentUser.venue_owner_id
         });
-      } else {
-        this.props.history.push('/login')
       }
-    } catch (err) {console.log(err.message)}
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   async handleLogin() {
-    const userData = await loginUser(this.state.authFormData)
-    if (userData) {
-      localStorage.setItem("jwt", userData.token);
-      await this.checkLogin();
-      return true;
-    } else {
-      this.props.history.push('/login');
+    try {
+      const userData = await loginUser(this.state.authFormData)
+      if (userData && userData.token) {
+        localStorage.setItem("jwt", userData.token);
+        await this.checkLogin();
+        return true;
+      } else {
+        this.props.history.push('/login');
+      }
+    } catch (err) {
+      console.log(err.message)
     }
   }
 
   async handleRegister() {
-    let venue_owner = this.state.registerFormData;
-    let venue = this.state.venueForm;
-    venue_owner.venue_attributes = venue;
-    console.log(venue_owner)
-    await registerUser({ "venue_owner": venue_owner })
-    this.handleLogin();
+    try {
+      let venue_owner = this.state.registerFormData;
+      let venue = this.state.venueForm;
+      venue_owner.venues_attributes = [venue];
+      console.log(venue_owner)
+      const userData = await registerUser({ "venue_owner": venue_owner })
+      if (userData && userData.token) {
+        localStorage.setItem("jwt", userData.token);
+        await this.checkLogin();
+        return true;
+      } else {
+        this.props.history.push('/register')
+      }
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   handleLogout() {
@@ -163,17 +184,25 @@ class App extends Component {
   }
 
   async handleDeleteEvent(id) {
-    await deleteEvent(id);
-    const events = await getEvents();
-    this.setState({events})
-    this.props.history.push('/');
+    try {
+      await deleteEvent(id);
+      const events = await getEvents();
+      this.setState({events})
+      this.props.history.push('/');
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   async handleDeleteVenue(id) {
-    await deleteVenue(id);
-    const venues = await getVenues();
-    this.setState({venues})
-    this.props.history.push('/');
+    try {
+      await deleteVenue(id);
+      const venues = await getVenues();
+      this.setState({venues})
+      this.props.history.push('/');
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   venueHandleChange(e) {
@@ -187,17 +216,19 @@ class App extends Component {
   }
 
   async addVenue() {
-    // e && e.preventDefault();
-    console.log(this.state.user)
-    await this.setState(prevState => ({
-      venueForm: {
-        ...prevState.venueForm,
-        venue_owner_id: this.state.user.id
-      }
-    }))
-    console.log(this.state.venueForm);
-    let response = await newVenue({"venue": this.state.venueForm})
-    console.log('resp', response);
+    try {
+      await this.setState(prevState => ({
+        venueForm: {
+          ...prevState.venueForm,
+          venue_owner_id: this.state.user.id
+        }
+      }))
+      console.log(this.state.venueForm);
+      let response = await newVenue({"venue": this.state.venueForm})
+      console.log('resp', response);
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   handleDaySelect(e) {
@@ -227,6 +258,7 @@ class App extends Component {
 
   handleMediaSelect(e) {
     const { media } = this.state.eventForm;
+    console.log(media)
     let checked = e.target.checked;
     let selectedMedium = e.target.value;
     if (checked) {
@@ -261,18 +293,26 @@ class App extends Component {
   }
 
   async addEvent() {
-    // e && e.preventDefault();
-    let response = await newEvent({"event": this.state.eventForm})
-    console.log('resp', response);
+    try {
+      let response = await newEvent({"event": this.state.eventForm})
+      console.log('resp', response);
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   async updateEvent(id) {
-    const response = await updateEvent(id, {"event": this.state.eventForm})
-    console.log('response', response)
+    try {
+      const response = await updateEvent(id, {"event": this.state.eventForm})
+      console.log('response', response)
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   selectEvent(artEvent) {
     let mediaArray = artEvent.media.map(medium => medium.category)
+    console.log(mediaArray);
     this.setState({
       eventForm: {
         name: artEvent.name,
@@ -288,8 +328,12 @@ class App extends Component {
   }
 
   async updateVenue(id) {
-    const response = await updateVenue(id, {"venue": this.state.venueForm})
-    console.log('venue response', response)
+    try {
+      const response = await updateVenue(id, {"venue": this.state.venueForm})
+      console.log('venue response', response)
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   selectVenue(venue) {

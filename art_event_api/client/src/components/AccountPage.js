@@ -10,7 +10,8 @@ class AccountPage extends Component {
     super(props);
     this.state = {
       addVenue: false,
-      addEvent: false
+      addEvent: false,
+      user: null
     }
     this.createVenue = this.createVenue.bind(this);
     this.newVenue = this.newVenue.bind(this);
@@ -19,13 +20,18 @@ class AccountPage extends Component {
   }
 
   async componentDidMount() {
-    const checkUser = localStorage.getItem("jwt")
-    if (checkUser) {
-      const currentUser = decode(checkUser);
-      const user = await getUser(checkUser, currentUser.venue_owner_id);
-      await this.setState({
-        user: user
-      });
+    try {
+      const checkUser = await localStorage.getItem("jwt")
+      console.log(checkUser)
+      if (checkUser) {
+        const currentUser = decode(checkUser);
+        const user = await getUser(checkUser, currentUser.venue_owner_id);
+        await this.setState({
+          user: user
+        });
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -61,7 +67,7 @@ class AccountPage extends Component {
     const owner = this.state.user;
     return (
       <div>
-        { owner ?
+        { this.props.user_id && owner ?
           <div className="account dashboard">
             <h2>Welcome, {owner.first_name} {owner.last_name}</h2>
             <div className="owner-venues">

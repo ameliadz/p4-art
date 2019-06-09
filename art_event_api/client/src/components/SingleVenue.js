@@ -9,15 +9,26 @@ class SingleVenue extends Component {
     super(props);
     this.state = {
       venue: null,
-      editVenue: false
+      editVenue: false,
+      user_id: null
     }
     this.editArtVenue = this.editArtVenue.bind(this);
     this.updateArtVenue = this.updateArtVenue.bind(this);
   }
 
   async componentDidMount() {
-    const venue = await getVenue(this.props.match.params.id);
-    this.setState({ venue })
+    try {
+      const venue = await getVenue(this.props.match.params.id);
+      this.setState({ venue })
+      console.log(localStorage.getItem("jwt"))
+      if (localStorage.getItem("jwt")) {
+        this.setState({
+          user_id: decode(localStorage.getItem("jwt")).venue_owner_id
+        })
+      }
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   editArtVenue() {
@@ -29,12 +40,16 @@ class SingleVenue extends Component {
 
   async updateArtVenue(e, id) {
     e.preventDefault();
-    this.props.updateVenue(id);
-    const venue = await getVenue(this.props.match.params.id);
-    this.setState({
-      editVenue: false,
-      venue: venue
-    })
+    try {
+      this.props.updateVenue(id);
+      const venue = await getVenue(this.props.match.params.id);
+      await this.setState({
+        editVenue: false,
+        venue: venue
+      })
+    } catch (err) {
+      console.log(err.message)
+    }
   }
 
   venueEvents = () => {
@@ -55,7 +70,7 @@ class SingleVenue extends Component {
   }
 
   render() {
-    const { venue } = this.state;
+    const { venue, user_id } = this.state;
     return (
       <div>
         { venue && <div className="single-venue">
@@ -67,7 +82,7 @@ class SingleVenue extends Component {
             <h4>Events at {venue.name}:</h4>
             {this.venueEvents()}
           </div>
-          {decode(localStorage.getItem("jwt")) && venue.venue_owner_id === decode(localStorage.getItem("jwt").venue_owner_id) ?
+          {user_id && (venue.venue_owner_id === user_id) ?
             <div className="buttons">
               { this.state.editVenue ?
                 <form onSubmit={(e) => this.updateArtVenue(e, venue.id)}>
@@ -75,7 +90,7 @@ class SingleVenue extends Component {
                   <button type="submit">Update Venue</button>
                 </form> : <button onClick={this.editArtVenue}>Edit Venue</button> }
               <button type="button" onClick={() => this.props.handleDelete(venue.id)}>Delete Venue</button>
-            </div> : null }
+            </div> : <p></p> }
         </div> }
       </div>
     )
