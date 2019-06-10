@@ -7,8 +7,8 @@ class Map extends Component {
     super(props);
     this.state = {
       viewport: {
-        width: 400,
-        height: 400,
+        width: 500,
+        height: 500,
         latitude: 40.7128,
         longitude: -74.0060,
         zoom: 8
