@@ -50,7 +50,7 @@ class App extends Component {
         permanent: "",
         latitude: "",
         longitude: "",
-        venue: "",
+        venue_id: "",
         media: []
       }
     }
@@ -78,12 +78,10 @@ class App extends Component {
 
   async componentDidMount() {
     try {
-      const test = await this.checkLogin();
-      console.log(test)
+      await this.checkLogin();
       const venues = await getVenues();
       const events = await getEvents();
       this.setState({ venues, events });
-      console.log(this.state);
     } catch (err) {
       console.log(err.message)
     }
@@ -92,11 +90,8 @@ class App extends Component {
   async checkLogin() {
     try {
       const checkUser = localStorage.getItem("jwt")
-      console.log(checkUser);
-      console.log(typeof checkUser)
       if (checkUser) {
         const currentUser = decode(checkUser);
-        console.log(currentUser);
         await this.setState({
           user_id: currentUser.venue_owner_id
         });
@@ -126,7 +121,6 @@ class App extends Component {
       let venue_owner = this.state.registerFormData;
       let venue = this.state.venueForm;
       venue_owner.venues_attributes = [venue];
-      console.log(venue_owner)
       const userData = await registerUser({ "venue_owner": venue_owner })
       if (userData && userData.token) {
         localStorage.setItem("jwt", userData.token);
@@ -184,24 +178,28 @@ class App extends Component {
   }
 
   async handleDeleteEvent(id) {
-    try {
-      await deleteEvent(id);
-      const events = await getEvents();
-      this.setState({events})
-      this.props.history.push('/');
-    } catch (err) {
-      console.log(err.message)
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      try {
+        await deleteEvent(id);
+        const events = await getEvents();
+        this.setState({events})
+        this.props.history.push('/');
+      } catch (err) {
+        console.log(err.message)
+      }
     }
   }
 
   async handleDeleteVenue(id) {
-    try {
-      await deleteVenue(id);
-      const venues = await getVenues();
-      this.setState({venues})
-      this.props.history.push('/');
-    } catch (err) {
-      console.log(err.message)
+    if (window.confirm("Are you sure you want to delete this venue?")) {
+      try {
+        await deleteVenue(id);
+        const venues = await getVenues();
+        this.setState({venues})
+        this.props.history.push('/');
+      } catch (err) {
+        console.log(err.message)
+      }
     }
   }
 
@@ -220,12 +218,10 @@ class App extends Component {
       await this.setState(prevState => ({
         venueForm: {
           ...prevState.venueForm,
-          venue_owner_id: this.state.user.id
+          venue_owner_id: this.state.user_id
         }
       }))
-      console.log(this.state.venueForm);
       let response = await newVenue({"venue": this.state.venueForm})
-      console.log('resp', response);
     } catch (err) {
       console.log(err.message)
     }
@@ -258,7 +254,6 @@ class App extends Component {
 
   handleMediaSelect(e) {
     const { media } = this.state.eventForm;
-    console.log(media)
     let checked = e.target.checked;
     let selectedMedium = e.target.value;
     if (checked) {
@@ -295,7 +290,6 @@ class App extends Component {
   async addEvent() {
     try {
       let response = await newEvent({"event": this.state.eventForm})
-      console.log('resp', response);
     } catch (err) {
       console.log(err.message)
     }
@@ -304,7 +298,6 @@ class App extends Component {
   async updateEvent(id) {
     try {
       const response = await updateEvent(id, {"event": this.state.eventForm})
-      console.log('response', response)
     } catch (err) {
       console.log(err.message)
     }
@@ -312,7 +305,6 @@ class App extends Component {
 
   selectEvent(artEvent) {
     let mediaArray = artEvent.media.map(medium => medium.category)
-    console.log(mediaArray);
     this.setState({
       eventForm: {
         name: artEvent.name,
@@ -330,7 +322,6 @@ class App extends Component {
   async updateVenue(id) {
     try {
       const response = await updateVenue(id, {"venue": this.state.venueForm})
-      console.log('venue response', response)
     } catch (err) {
       console.log(err.message)
     }
@@ -401,8 +392,15 @@ class App extends Component {
             venues={this.state.venues}
           />} />
           <Route path="/venues/:id" render={(props) => <SingleVenue
-            {...props} user_id={this.state.user_id} selectVenue={this.selectVenue}
-            handleDelete={this.handleDeleteVenue} updateVenue={this.updateVenue} venueHandleChange={this.venueHandleChange} handleDaySelect={this.handleDaySelect}
+            {...props} user_id={this.state.user_id}
+            selectVenue={this.selectVenue}
+            handleDelete={this.handleDeleteVenue}
+            updateVenue={this.updateVenue}
+            venueHandleChange={this.venueHandleChange}
+            handleDaySelect={this.handleDaySelect}
+            eventHandleChange={this.eventHandleChange}
+            addEvent={this.addEvent}
+            handleMediaSelect={this.handleMediaSelect}
           />} />
         </Switch>
       </div>

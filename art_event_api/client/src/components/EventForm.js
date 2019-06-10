@@ -12,7 +12,8 @@ class EventForm extends Component {
 
   async componentDidMount() {
     const media = await getMedia();
-    const user = await getUser(localStorage.getItem('jwt'), this.props.user_id)
+    const checkUser = await localStorage.getItem("jwt")
+    const user = await getUser(checkUser, this.props.user_id)
     const venues = user.venues;
     this.setState({ media, venues })
   }
@@ -23,7 +24,7 @@ class EventForm extends Component {
       return this.props.artEvent && this.props.artEvent.media.some(media => media.id === medium.id)
     }
     return media.map(medium => {
-      return <span key={medium.id}><input type="checkbox" name="media" value={medium.category} defaultChecked={media && inEventMedia(medium)} onChange={this.props.handleMediaSelect}/><span>{medium.category}</span></span>
+      return <div key={medium.id}><input type="checkbox" name="media" value={medium.category} defaultChecked={media && inEventMedia(medium)} onChange={this.props.handleMediaSelect}/><span>{medium.category}</span></div>
     })
   }
 
@@ -51,7 +52,7 @@ class EventForm extends Component {
         <div>
           <label htmlFor="description" className="label">Description</label>
           <div>
-            <textarea name="description" placeholder="Event description" onChange={this.props.handleChange} defaultValue={(artEvent && artEvent.description) || ""} required></textarea>
+            <textarea rows="5" name="description" placeholder="Event description" onChange={this.props.handleChange} defaultValue={(artEvent && artEvent.description) || ""} required></textarea>
           </div>
         </div>
         <div>
@@ -75,21 +76,25 @@ class EventForm extends Component {
         <div>
           <label htmlFor="permanent" className="label">Permanent Event?</label>
           { /* if permanent event is false, start/end date should be required */ }
-          <div>
-            <input name="permanent" type="radio" onChange={this.props.handleChange} value="true" checked={artEvent && artEvent.permanent}/>Yes
-            <input name="permanent" type="radio" onChange={this.props.handleChange} value="false" />No
-          </div>
-        </div>
-        <div>
-          <label htmlFor="media" className="label">Media Types</label>
-          <div>
-            {this.state.media && this.renderMedia() }
+          <div className="radio">
+            <div>
+              <input name="permanent" type="radio" onChange={this.props.handleChange} value="true" checked={artEvent && artEvent.permanent}/>Yes
+            </div>
+            <div>
+              <input name="permanent" type="radio" onChange={this.props.handleChange} value="false" />No
+            </div>
           </div>
         </div>
         <div>
           <label htmlFor="media" className="label">Hosting Venue</label>
           <div>
             {this.state.venues ? this.renderVenues() : <p>You don't have any venues to host this event!</p> }
+          </div>
+        </div>
+        <div className="media">
+          <label htmlFor="media" className="label">Media Types</label>
+          <div>
+            {this.state.media && this.renderMedia() }
           </div>
         </div>
       </div>

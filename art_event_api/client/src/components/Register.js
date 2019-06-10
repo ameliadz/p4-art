@@ -34,7 +34,7 @@ class Register extends Component {
             </div>
           </div>
 
-          <div>
+          <div className="register-venue">
             <VenueForm handleChange={this.props.venueHandleChange} handleDaySelect={this.props.handleDaySelect} />
           </div>
 

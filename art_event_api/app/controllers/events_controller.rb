@@ -17,6 +17,7 @@ class EventsController < ApplicationController
     if @event.save
       render json: @event, include: [:venue, :media], status: :created
     else
+      puts @event.errors
       render json: { errors: @event.errors }, status: :unprocessable_entity
     end
   end

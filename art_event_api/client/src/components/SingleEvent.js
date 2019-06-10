@@ -58,11 +58,13 @@ class SingleEvent extends Component {
     return (
       <div>
         { artEvent && <div className="single-event">
-          <p>{artEvent.name}</p>
-          <p>{artEvent.description}</p>
-          <p>{artEvent.price}</p>
-          { artEvent.permanent ? <p>Permanent event</p> : <p>{artEvent.start_date} - {artEvent.end_date}</p> }
-          <ul>
+          <h2>{artEvent.name}</h2>
+          <p className="description">{artEvent.description}</p>
+          <div>
+            <p>{artEvent.price}</p>
+            { artEvent.permanent ? <p>Permanent event</p> : <p>{artEvent.start_date} - {artEvent.end_date}</p> }
+          </div>
+          <ul className="media-list">
             {artEvent.media.map((medium, index) => <li key={index}>{medium.category}</li>)}
           </ul>
           <img src={artEvent.images[2]} alt={artEvent.name} />

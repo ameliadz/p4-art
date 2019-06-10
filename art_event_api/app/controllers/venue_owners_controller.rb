@@ -8,7 +8,7 @@ class VenueOwnersController < ApplicationController
   end
 
   def show
-    render json: @venue_owner, include: :venues, status: :ok
+    render json: @venue_owner, include: {venues: {include: :events}}, status: :ok
   end
 
   def create

@@ -22,7 +22,6 @@ class AccountPage extends Component {
   async componentDidMount() {
     try {
       const checkUser = await localStorage.getItem("jwt")
-      console.log(checkUser)
       if (checkUser) {
         const currentUser = decode(checkUser);
         const user = await getUser(checkUser, currentUser.venue_owner_id);
@@ -66,17 +65,25 @@ class AccountPage extends Component {
   render() {
     const owner = this.state.user;
     return (
-      <div>
+      <div className="account">
         { this.props.user_id && owner ?
-          <div className="account dashboard">
+          <div className="dashboard">
             <h2>Welcome, {owner.first_name} {owner.last_name}</h2>
+            <p>Your Venues:</p>
             <div className="owner-venues">
-              <p>Your Venues:</p>
               <ul>
                 {owner.venues.map(venue => <li key={venue.id}><Link to={`/venues/${venue.id}`}>{venue.name}</Link> - {venue.category}
                   <p>{venue.address}</p>
                   </li>)}
               </ul>
+            </div>
+            <p>Your Events:</p>
+            <div className="owner-events">
+              <ul>
+                {owner.venues.map(venue => venue.events.map(artEvent => <li key={artEvent.id}><Link to={`/events/${artEvent.id}`}>{artEvent.name}</Link> ({venue.name})</li>))}
+              </ul>
+            </div>
+            <div>
               { this.state.addVenue ?
                 <form onSubmit={this.newVenue}>
                   <VenueForm handleDaySelect={this.props.handleDaySelect} handleChange={this.props.venueHandleChange}/>

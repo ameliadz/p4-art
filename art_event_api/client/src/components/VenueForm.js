@@ -47,16 +47,30 @@ class VenueForm extends Component {
             <input name="closing_time" type="time" step="1" onChange={this.props.handleChange} defaultValue={(venue && venue.closing_time) || undefined} required/>
           </div>
         </div>
-        <div>
+        <div className="days">
           <label htmlFor="days_open" className="label">Days Open</label>
           <div>
             <input type="checkbox" name="days_open" value="mon" onChange={this.props.handleDaySelect} defaultChecked={venue && venue.days.some(day => day === "mon")} />Monday
+          </div>
+          <div>
             <input type="checkbox" name="days_open" value="tue" onChange={this.props.handleDaySelect} defaultChecked={venue && venue.days.some(day => day === "tue")} />Tuesday
+          </div>
+          <div>
             <input type="checkbox" name="days_open" value="wed" onChange={this.props.handleDaySelect} defaultChecked={venue && venue.days.some(day => day === "wed")} />Wednesday
+          </div>
+          <div>
             <input type="checkbox" name="days_open" value="thu" onChange={this.props.handleDaySelect} defaultChecked={venue && venue.days.some(day => day === "thu")} />Thursday
+          </div>
+          <div>
             <input type="checkbox" name="days_open" value="fri" onChange={this.props.handleDaySelect} defaultChecked={venue && venue.days.some(day => day === "fri")} />Friday
+          </div>
+          <div>
             <input type="checkbox" name="days_open" value="sat" onChange={this.props.handleDaySelect} defaultChecked={venue && venue.days.some(day => day === "sat")} />Saturday
+          </div>
+          <div>
             <input type="checkbox" name="days_open" value="sun" onChange={this.props.handleDaySelect} defaultChecked={venue && venue.days.some(day => day === "sun")} />Sunday
+          </div>
+          <div>
             <input type="checkbox" name="days_open" value="hol" onChange={this.props.handleDaySelect} defaultChecked={venue && venue.days.some(day => day === "hol")} />Holidays
           </div>
         </div>
