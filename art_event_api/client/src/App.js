@@ -92,9 +92,17 @@ class App extends Component {
       const checkUser = localStorage.getItem("jwt")
       if (checkUser) {
         const currentUser = decode(checkUser);
-        await this.setState({
-          user_id: currentUser.venue_owner_id
-        });
+        let currentTime = new Date().getTime() / 1000;
+        if (currentTime > currentUser.exp) {
+         await this.setState({
+           user_id: null
+         })
+       } else {
+         await this.setState({
+           user_id: currentUser.venue_owner_id
+         });
+       }
+        console.log(currentUser.exp)
       }
     } catch (err) {
       console.log(err.message)
