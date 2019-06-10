@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export default function Header(props) {
   return (
     <header>
-      <Link to="/"><h1> NYC ART | <span>happening</span></h1></Link>
+      <Link to="/"><h1>Where Art Thou - NYC</h1></Link>
       <Nav user_id={props.user_id} />
     </header>
   )
