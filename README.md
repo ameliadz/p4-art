@@ -25,4 +25,5 @@ notes during development:<br />
 dependencies: back-end - rack-cors, pry-rails, bcrypt, jwt, foreman. front-end - axios, react-map-gl, react router.
 
 
-**known issues** Setting dates on events does not currently work. Page redirecting also being tweaked.
+<br />
+**known issues**: Setting dates on events does not currently work. Page redirecting also being tweaked.
