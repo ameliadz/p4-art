@@ -11,7 +11,7 @@ Art event database using React on Rails. I'd like to use auth and maybe even a m
 Have an art venue owner be able to create a profile, create venues associated with that profile, and create events associated with those venues. These venues and events will also be able to be updated and deleted. Deleting should cascade, or error out, if an owner attempts to delete a venue with events still scheduled there. Non-logged in users will not be able to create, edit, or delete venues and events, and a logged in user will not be able to create, edit, or delete venues or events that do not belong to their profile.
 
 ### Post-MVP
-Create non-owner profiles, bookmark events, use mapbox to display event locations since Art Beat's data comes with latitude and longitude, include picture upload for events.
+Create non-owner profiles, bookmark events, use mapbox to display event locations since Art Beat's data comes with latitude and longitude, include picture upload for events. Search and filter functionality.
 
 ### Wireframes
 ![image1 2](https://media.git.generalassemb.ly/user/19640/files/35b77d00-861a-11e9-9041-cb6db1c8864a)<br />
